@@ -1,0 +1,30 @@
+#ifndef AB1D5576_F986_4B13_AE08_ABCF50CDF907
+#define AB1D5576_F986_4B13_AE08_ABCF50CDF907
+#include <stdio.h>
+#include "dict.h"
+#define CHAR_BIT 8
+#define TABLE_SIZE 4091
+
+typedef struct hash_element {
+    int pair_code;
+    int prefix_index;
+    char last_char;
+    struct hash_element *next;
+} hash_element;
+
+typedef struct {
+    hash_element *dict[TABLE_SIZE];
+} hash_table;
+
+
+void initialize_hash(hash_table *table);
+
+void hash_insert(hash_table *table, int pair_code, int prefix_index, char last_char);
+
+int get_code (hash_table *table, int prefix_index, char last_char);
+
+void free_hash(hash_table *table);
+
+void encode(int p, int max_bit_length);
+
+#endif // AB1D5576_F986_4B13_AE08_ABCF50CDF907

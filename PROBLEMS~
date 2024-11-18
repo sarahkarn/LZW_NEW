@@ -1,0 +1,15 @@
+TABLE_LEN defined in mutliple places
+trying to allocate hash_table in main and in encode
+changed hash_table to include the next_code variable
+last_char in the hash_element must be an int!
+
+
+decode wasnt implemented correctly:
+       //This was missing:
+       push finalK on kstack
+       c = old
+
+stack code was broken. Comparing size of stack with initial size instead of current
+size when deciding if i want to realloc
+
+redefining NOT_FOUND and EMPTY in encode.c

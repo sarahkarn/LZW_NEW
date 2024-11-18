@@ -1,0 +1,67 @@
+HEADERS = decode.h encode.h dict.h common.h stack.h
+OBJECTS = program.o decode.o encode.o common.o stack.o
+
+default: program
+
+program.o: main.c $(HEADERS)
+	gcc -c main.c -o program.o
+
+decode.o: decode.c decode.h dict.h common.h
+	gcc -c decode.c -o decode.o
+
+encode.o: encode.c encode.h dict.h common.h
+	gcc -c encode.c -o encode.o
+
+common.o: common.c common.h
+	gcc -c common.c -o common.o
+
+
+program: $(OBJECTS)
+	touch encode
+	touch decode
+	rm -f decode
+	rm -f encode
+	gcc $(OBJECTS) -o program
+	ln program decode
+	ln program encode
+
+clean:
+	-rm -f $(OBJECTS)
+	-rm -f program
+	-rm -f decode
+	-rm -f encode
+
+
+foo_1: 
+	echo "Foo Bar Foo Bar Foo Bar foo bar foo bar Foo Bar Foobar" | STAGE=1 ./encode | STAGE=1 ./decode
+
+
+baba:
+	echo "BABA" | ./encode | ./decode
+
+
+baba_1:
+	echo "BABA" | STAGE=1 ./encode | STAGE=1 ./decode
+
+
+baba_2:
+	echo "BABA" | STAGE=2 ./encode -m 9 -p | STAGE=2 ./decode
+
+hello_world:
+	./encode < test_cases/hello_world.txt | ./decode | cmp - test_cases/hello_world.txt
+
+
+numbers: 
+	./encode < test_cases/numbers.txt | ./decode | cmp - test_cases/numbers.txt
+
+blank: 
+	./encode < test_cases/blank.txt | ./decode | cmp - test_cases/blank.txt
+
+baba_encode:
+	echo "BABA" | STAGE=1 ./encode
+	echo "BABA" | STAGE=2 ./encode -m 10 -p
+	echo "BABA" | STAGE=2 ./encode -p
+
+
+boot_info:
+	./encode < test_cases/Boot-Info_20240527_2222.txt | ./decode | cmp - test_cases/Boot-Info_20240527_2222.txt

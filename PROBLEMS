@@ -1,0 +1,23 @@
+TABLE_LEN defined in mutliple places
+trying to allocate hash_table in main and in encode
+changed hash_table to include the next_code variable
+last_char in the hash_element must be an int!
+
+
+decode wasnt implemented correctly:
+       //This was missing:
+       push finalK on kstack
+       c = old
+
+stack code was broken. Comparing size of stack with initial size instead of current
+size when deciding if i want to realloc
+
+redefining NOT_FOUND and EMPTY in encode.c
+
+int the table_find I was casting k to a char, but I should have used int values
+
+Didn't propertly initialize mark_prefix_bit in insert_pair
+
+moved the pruning logic to the top of the get_code loop and the get_char loops
+
+created a codec structure to handle writing and reading compressed data

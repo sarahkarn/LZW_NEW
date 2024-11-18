@@ -1,0 +1,67 @@
+#include <libgen.h> // Include for basename
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "decode.h"
+#include "encode.h"
+
+#include "common.h"
+
+#include <unistd.h>
+
+//#include "dict.h"
+
+// struct dict_struct dict[4096];
+
+int main(int argc, char *argv[]) {
+  static char bin[64], bout[64];
+  setvbuf(stdin, bin, _IOFBF, 64);
+  setvbuf(stdout, bout, _IOFBF, 64);
+
+  char *exec_name = basename(argv[0]); // Get the executable name
+
+  // hash_table dict;
+  // initialize_hash(&dict);
+
+  if (strcmp(exec_name, "encode") == 0) {
+    //hash_table dict;
+    //initialize_hash(&dict);
+    int maxBits = 9;
+    int pruning = 0;
+
+    // TODO: Parsing logic
+    // Check STAGE environment variable
+    char *stage_env = getenv("STAGE");
+    int stage = stage_env ? atoi(stage_env) : 0;
+
+    // Only parse -p and -m flags if STAGE is 2 or 3
+    if (stage == 2 || stage == 3) {
+      for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-p") == 0) {
+          pruning = 1; // Enable prune mode
+        } else if (strcmp(argv[i], "-m") == 0 && i + 1 < argc) {
+          maxBits = atoi(argv[++i]); // Set max bits from argument
+        } else {
+          fprintf(stderr, "Usage: %s [-m MAXBITS] [-p] < input > output\n",
+                  argv[0]);
+          exit(1);
+        }
+      }
+    }
+
+    encode(pruning, maxBits);
+    free_hash(&dict);
+  } else if (strcmp(exec_name, "decode") == 0) {
+    if (argc > 1) {
+      fprintf(stderr, "decode: invalid option '%s'\n", argv[1]);
+      exit(1);
+    }
+    decode();
+  } else {
+    fprintf(stderr, "Usage: %s [-m MAXBITS] [-p] < input > output\n", argv[0]);
+    fprintf(stderr, "       %s < input > output\n", argv[0]);
+    exit(1);
+  }
+  return 0;
+}
