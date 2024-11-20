@@ -68,7 +68,7 @@ int stack_non_empty(Stack *stack) {
 
 /*void push(Stack *stack, char val) {
   if (stack->top >= (STACK_LEN - 1)) {
-    printf("Stack overflow - cannot push the value");
+    fprintf(stderr,"Stack overflow - cannot push the value");
     exit(1);
   } else {
     int insert_index = stack->top++;
@@ -78,7 +78,7 @@ int stack_non_empty(Stack *stack) {
 
 char pop(Stack *stack) {
   if (check_empty(stack)) {
-    printf("Stack underflow - cannot pop any values");
+    fprintf(stderr,"Stack underflow - cannot pop any values");
     exit(1);
   } else {
     int pop_index = stack->top;

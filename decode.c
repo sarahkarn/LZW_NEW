@@ -17,7 +17,13 @@ void decode() {
   hash_table *table = initialize_hash(table);
   Stack *stack = initialize_stack();
 
-  codec *codec = new_codec();
+  // TESTING NEW IMP FOR NOW codec *codec = new_codec();
+
+#ifdef USE_CODEC
+  codec *codec = initialize_codec();  
+#else
+  coder_dec *coder_dec = initialize_coder_dec();
+#endif  
 
   int current_num_bits = 9;
   int max_bits;
@@ -34,14 +40,24 @@ void decode() {
   int next_special_code = 511;
 
   //  while ((newC = c = get_code()) != EOF) {
-  while ((newC = c = codec_get(codec, FIXED_BITS)) != EOF) {
+
+#ifdef USE_CODEC
+  while ((newC = c = codec_get(codec, FIXED_BITS)) != EOF) {  
+#else
+  while ((newC = c = coder_dec_get(coder_dec, FIXED_BITS)) != EOF) {
+#endif    
+
+
+    //  fprintf(stderr,"c:%d\n", c );
+  
+  // TESTING NEW IMP FOR NOW while ((newC = c = codec_get(codec, FIXED_BITS)) != EOF) {
 
     assert(c >= 0);
     if (check_first_code) { // treating the first code differently since it
                             // outputs MAXBITS.
       max_bits = c;
-      check_first_code =
-          0; // set first code flag to 0 once MAXBITS has been identified
+      check_first_code = 0; // set first code flag to 0 once MAXBITS has been identified
+
       check_second_code++;
       continue;
     }
@@ -98,9 +114,7 @@ void decode() {
 
       if (!table_full(table)) {
         int new_code = insert_pair_in_table(table, oldC, final_k);
-
         int sz = table_sz(table);
-
         if (sz >= 4090) {
           fprintf(stderr, "DECODE: insert %d %d %d\n", new_code, oldC, final_k);
         }
@@ -117,5 +131,11 @@ void decode() {
   free(stack->characters);
   free(stack);
   free_hash(table);
-  free_codec(codec);
+
+#ifdef USE_CODEC
+  codec_free(codec);  
+#else
+  coder_dec_free(coder_dec);
+#endif  
+  // TESTING NEW IMP FOR NOW free_codec(codec);
 }

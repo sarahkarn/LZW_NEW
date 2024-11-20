@@ -62,9 +62,16 @@ k);
 } */
 
 // my latest version of encode BELOW
+
+int count = 0;
+
 void encode(int p, int max_bit_length) {
 
-  codec *codec = new_codec();
+#ifdef USE_CODEC
+  codec *codec = initialize_codec();
+#else
+  coder_dec *coder_dec = initialize_coder_dec();
+#endif
 
   hash_table *table = initialize_hash();
 
@@ -72,14 +79,20 @@ void encode(int p, int max_bit_length) {
 
   // first line is MAXBIT as specified in bullet (E)
 
-  codec_put(codec, max_bit_length, FIXED_BITS);
-  // printf("%d\n", max_bit_length);
-  // fflush(stdout);
+  // TESTING NEW IMP FOR NOW codec_put(codec, max_bit_length, FIXED_BITS);
 
+#ifdef USE_CODEC
+  codec_put(codec, max_bit_length, FIXED_BITS);  
+#else
+  coder_dec_put(coder_dec, max_bit_length, FIXED_BITS);
+#endif  
+
+#ifdef USE_CODEC
   codec_put(codec, p, FIXED_BITS);
-  // second line is p as specified on page 2
-  // printf("%d\n", p);
-  // fflush(stdout);
+#else
+  coder_dec_put(coder_dec, p, FIXED_BITS);
+#endif  
+
 
   int C = EMPTY;
   int K;
@@ -100,7 +113,22 @@ void encode(int p, int max_bit_length) {
 
       assert(C >= 0);
 
-      codec_put(codec, C, FIXED_BITS);
+      // TESTING NEW IMP FOR NOW codec_put(codec, C, FIXED_BITS);
+
+
+      //#if 1
+      //      if( C == 6808 ) {
+      //	fprintf(stderr, "writing C:%d\n", C );
+      //	fprintf(stderr,"This shouldn't happen\n");
+      //	exit(-1);
+      //      }
+      //#endif      
+
+#ifdef USE_CODEC
+      codec_put(codec, C, FIXED_BITS);      
+#else
+      coder_dec_put(coder_dec, C, FIXED_BITS);
+#endif      
       // printf("%d\n", C);
       // fflush(stdout);
 
@@ -128,8 +156,15 @@ void encode(int p, int max_bit_length) {
 	
 	if (num_bits < max_bit_length) {	
 	  if (new_code == next_special_code) { // ADDED THIS
-            printf("%d\n", new_code);
-            fflush(stdout);
+
+
+#ifdef USE_CODEC
+	    codec_put(codec, new_code, FIXED_BITS);      
+#else
+	    coder_dec_put(coder_dec, new_code, FIXED_BITS);
+#endif      
+	    
+
             num_bits++;
             fprintf(stderr, "ENCODE: num_bits has been incremented to %d\n", num_bits);
             assert(num_bits <= max_bit_length);
@@ -159,7 +194,12 @@ void encode(int p, int max_bit_length) {
 // Output code C ( if c != EMPTY )
 if (C != EMPTY) {
   assert(C >= 0);
-  codec_put(codec, C, FIXED_BITS);
+#ifdef USE_CODEC
+  codec_put(codec, C, FIXED_BITS);  
+#else  
+  coder_dec_put(coder_dec, C, FIXED_BITS);
+#endif  
+  // TESTING NEW IMP FOR NOW codec_put(codec, C, FIXED_BITS);
 }
 
 // fprintf(stderr,"C: Table has %d entries\n", table->next_pair_code );  DEBUG
@@ -170,5 +210,11 @@ if (DBG) {
 
 free_hash(table);
 
-free_codec(codec);
+#ifdef USE_CODEC
+codec_free(codec); 
+#else 
+coder_dec_free(coder_dec);
+#endif
+
+// TESTING NEW IMP FOR NOW free_codec(codec);
 }

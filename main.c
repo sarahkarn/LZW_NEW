@@ -12,45 +12,39 @@
 #include <unistd.h>
 
 int DBG = 0;   // DBG is a global variable
-int STAGE = 0;
-
-//#include "dict.h"
-
-// struct dict_struct dict[4096];
+int STAGE = 0; // global
 
 int main(int argc, char *argv[]) {
 
-  //test_codec(3); // test stage 3 codec
-  //test_codec(2); // test stage 2 codec  
-  //exit(0);
-
-
-  
   static char bin[64], bout[64];
   setvbuf(stdin, bin, _IOFBF, 64);
   setvbuf(stdout, bout, _IOFBF, 64);
 
-  char *exec_name = basename(argv[0]); // Get the executable name
+  char *exec_name = basename(argv[0]);
 
-  // Check the STAGE environment variable
+  // Checking the STAGE environment variable
   char *stage_env = getenv("STAGE");
   STAGE = stage_env ? atoi(stage_env) : 0;
 
-  // Check the DBG environment variable
+  fprintf(stderr,"STAGE:%d\n", STAGE );
+
+  //test_coder_dec();
+  //return 0;
+
+
+  // Checking the DBG environment variable
   char *dbg_env = getenv("DBG");
   DBG = dbg_env ? atoi(dbg_env) : 0;
 
 
-  if (strcmp(exec_name, "encode") == 0) {
-    //hash_table dict;
-    //initialize_hash(&dict);
+  if (strcmp(exec_name, "encode") == 0) {   // default settings
     int maxBits = 12;
     int pruning = 0;
 
     // TODO: Parsing logic
     
 
-    // Only parse -p and -m flags if STAGE is 2 or 3
+    // Parsing of -p and -m flags only applies to STAGES 2 and 3
     if ( STAGE == 2 || STAGE == 3) {
       for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-p") == 0) {
@@ -65,11 +59,7 @@ int main(int argc, char *argv[]) {
       }
     }
 
-
     encode(pruning, maxBits);
-
-
-    //free_hash(&dict);
 
   } else if (strcmp(exec_name, "decode") == 0) {
     if (argc > 1) {

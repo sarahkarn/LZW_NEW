@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 int get_code() {
   int code;
   int scan_val = scanf("%d", &code);
@@ -84,8 +86,8 @@ int table_find(hash_table *table, int c, int k) {
 int insert_pair_in_table(hash_table *table, int c, int k) {
 
   if (table->next_pair_code >= TABLE_LEN) {
-    fprintf(stderr, "insert_pair_in_table: next_pair_code: %d|n",
-            table->next_pair_code);
+    fprintf(stderr, "insert_pair_in_table: next_pair_code: %d -- TABLE_LEN:%d|n", TABLE_LEN, table->next_pair_code);
+    assert(0);
   }
   assert(table->next_pair_code < TABLE_LEN);
   if (c >= table->next_pair_code) {
@@ -137,8 +139,8 @@ void free_hash(hash_table *table) {
 int CHAR(hash_table *table, int pair_code) {
   if (pair_code < 0 || pair_code >= TABLE_LEN ||
       table->codes[pair_code] == NULL) {
-    fprintf(stderr, "pair_code passed to CHAR function is not valid %d\n",
-            pair_code);
+    fprintf(stderr, "pair_code passed to CHAR function is not valid %d // TABLE_LEN: %d\n",
+            pair_code, TABLE_LEN );
     exit(-1);
   }
   return table->codes[pair_code]->last_char;
@@ -147,8 +149,8 @@ int CHAR(hash_table *table, int pair_code) {
 int PREF(hash_table *table, int pair_code) {
   if (pair_code < 0 || pair_code >= TABLE_LEN ||
       table->codes[pair_code] == NULL) {
-    fprintf(stderr, "pair_code passed to PREF function is not valid %d\n",
-            pair_code);
+    fprintf(stderr, "pair_code passed to PREF function is not valid %d // TABLE_LEN: %d\n",
+            pair_code, TABLE_LEN );
     exit(-1);
   }
   return table->codes[pair_code]->prefix_index;

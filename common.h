@@ -12,10 +12,10 @@
 #define CHAR_BIT 8
 #define PRUNE_CODE 10000
 
-#define FIXED_BITS  12
+#define FIXED_BITS  13
 
 extern int DBG;
-extern int STAGE;
+
 
 typedef struct hash_element {
     int pair_code;
