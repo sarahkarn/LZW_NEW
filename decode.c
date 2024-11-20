@@ -10,6 +10,15 @@
 #include <assert.h>
 
 
+int get_(coder_dec * coder_dec, int num_bits) {
+    #ifdef FIXED_BITS
+      coder_dec_get(coder_dec, FIXED_BITS);
+    #else
+      coder_dec_get(coder_dec, num_bits);
+    #endif
+}
+
+
 // NEW DECODE USING RIGHT SIDE PSEUDO
 void decode() {
 
@@ -18,7 +27,7 @@ void decode() {
 
   coder_dec *coder_dec = initialize_coder_dec();
 
-  int current_num_bits = 9;
+  int num_bits = 9;
   int max_bits;
   int p = 0; // pruning off by default
 
@@ -32,8 +41,8 @@ void decode() {
 
   int next_special_code = 511;
 
-
-  while ((newC = c = coder_dec_get(coder_dec, FIXED_BITS)) != EOF) {
+  while ((newC = c = get_(coder_dec, num_bits)) != EOF) {
+  //while ((newC = c = coder_dec_get(coder_dec, FIXED_BITS)) != EOF) {
 
     assert(c >= 0);
     if (check_first_code) { // treating the first code differently since it
@@ -53,10 +62,10 @@ void decode() {
 
 #ifdef USE_SPECIAL_CODES
     if (c == next_special_code) {
-      current_num_bits++;
-      fprintf(stderr, "DECODE: current_num_bits: %d\n", current_num_bits);
-      assert(current_num_bits <= max_bits);
-      next_special_code = next_special(current_num_bits);
+      num_bits++;
+      fprintf(stderr, "DECODE: num_bits: %d\n", num_bits);
+      assert(num_bits <= max_bits);
+      next_special_code = next_special(num_bits);
       continue;
     }
 #endif

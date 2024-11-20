@@ -12,7 +12,7 @@
 #define CHAR_BIT 8
 #define PRUNE_CODE 10000
 
-#define FIXED_BITS  13
+// #define FIXED_BITS  13
 
 extern int DBG;
 

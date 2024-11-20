@@ -15,9 +15,9 @@ int main() {
   int code = 0;
   // Read each line and extract decimal numbers
 #ifdef USE_CODEC
-  while ( (code= codec_get(c, FIXED_BITS) ) != EOF ) {  
+  while ( (code= codec_get(c, 13) ) != EOF ) {  
 #else  
-  while ( (code= coder_dec_get(c, FIXED_BITS) ) != EOF ) {
+    while ( (code= coder_dec_get(c, 13 )) != EOF ) {
 #endif    
     //fprintf(stderr,"%d\n", code );
     printf( "%d\n", code );

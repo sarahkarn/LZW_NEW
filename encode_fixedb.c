@@ -6,16 +6,6 @@
 
 int count = 0;
 
-int put_(coder_dec *c, int code, int num_bits) {
-  
-#ifdef FIXED_BITS  
-  coder_dec_put(c, code, FIXED_BITS);
-#else
-  coder_dec_put(c, code, num_bits );  
-#endif
-
-}
-
 void encode(int p, int max_bit_length) {
 
   int num_bits = 9;
@@ -29,13 +19,9 @@ void encode(int p, int max_bit_length) {
   // first line is MAXBIT as specified in bullet (E)
 
 
-  put_(coder_dec, max_bit_length, num_bits);
-  put_(coder_dec, p, num_bits);
+  coder_dec_put(coder_dec, max_bit_length, FIXED_BITS); 
 
-
-  //coder_dec_put(coder_dec, max_bit_length, FIXED_BITS); 
-
-  //coder_dec_put(coder_dec, p, FIXED_BITS);
+  coder_dec_put(coder_dec, p, FIXED_BITS);
 
   int C = EMPTY;
   int K;
@@ -48,15 +34,14 @@ void encode(int p, int max_bit_length) {
     // If the pair (C,K) is in the table
     if (code != NOT_FOUND) {
 
-      // Set C = code associated with the pair (C,K) in the table
+      // Set C = code associated witht the pair (C,K) in the table
       C = code;
 
     } else {
 
       assert(C >= 0);
 
-       put_(coder_dec, C, num_bits);
-      // coder_dec_put(coder_dec, C, FIXED_BITS);
+      coder_dec_put(coder_dec, C, FIXED_BITS);
      
       // printf("%d\n", C);
       // fflush(stdout);
@@ -86,8 +71,7 @@ void encode(int p, int max_bit_length) {
 	if (num_bits < max_bit_length) {	
 	  if (new_code == next_special_code) {
 
-        put_(coder_dec, new_code, num_bits);
-	    //coder_dec_put(coder_dec, new_code, FIXED_BITS);
+	    coder_dec_put(coder_dec, new_code, FIXED_BITS);
 	
             num_bits++;
             fprintf(stderr, "ENCODE: num_bits has been incremented to %d\n", num_bits);
@@ -120,8 +104,7 @@ void encode(int p, int max_bit_length) {
 if (C != EMPTY) {
   assert(C >= 0);
  
-  put_(coder_dec, C, num_bits);
-  //coder_dec_put(coder_dec, C, FIXED_BITS);
+  coder_dec_put(coder_dec, C, FIXED_BITS);
 
 }
 

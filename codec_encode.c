@@ -17,9 +17,9 @@ int main() {
   while (scanf("%d", &number) == 1) {
 
 #ifdef USE_CODEC
-    codec_put( c, number, FIXED_BITS );    
+    codec_put( c, number, 13 );    
 #else
-    coder_dec_put( c, number, FIXED_BITS );
+    coder_dec_put( c, number, 13 );
 #endif    
     
   }
