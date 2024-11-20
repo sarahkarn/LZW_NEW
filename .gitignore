@@ -8,3 +8,5 @@ DBG.decode
 decode
 encode
 program
+codec_decode
+codec_encode
