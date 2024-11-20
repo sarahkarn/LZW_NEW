@@ -4,11 +4,16 @@
 #include <stdlib.h>
 #include <assert.h>
 
+
 int count = 0;
 
 void encode(int p, int max_bit_length) {
 
+#ifdef USE_CODEC
+  codec *codec = initialize_codec();
+#else
   coder_dec *coder_dec = initialize_coder_dec();
+#endif
 
   hash_table *table = initialize_hash();
 
@@ -17,9 +22,18 @@ void encode(int p, int max_bit_length) {
   // first line is MAXBIT as specified in bullet (E)
 
 
-  coder_dec_put(coder_dec, max_bit_length, FIXED_BITS); 
+#ifdef USE_CODEC
+  codec_put(codec, max_bit_length, FIXED_BITS);  
+#else
+  coder_dec_put(coder_dec, max_bit_length, FIXED_BITS);
+#endif  
 
+#ifdef USE_CODEC
+  codec_put(codec, p, FIXED_BITS);
+#else
   coder_dec_put(coder_dec, p, FIXED_BITS);
+#endif  
+
 
   int C = EMPTY;
   int K;
@@ -40,8 +54,12 @@ void encode(int p, int max_bit_length) {
 
       assert(C >= 0);
 
+
+#ifdef USE_CODEC
+      codec_put(codec, C, FIXED_BITS);      
+#else
       coder_dec_put(coder_dec, C, FIXED_BITS);
-     
+#endif      
       // printf("%d\n", C);
       // fflush(stdout);
 
@@ -68,10 +86,16 @@ void encode(int p, int max_bit_length) {
 #ifdef USE_SPECIAL_CODES
 	
 	if (num_bits < max_bit_length) {	
-	  if (new_code == next_special_code) {
+	  if (new_code == next_special_code) { // ADDED THIS
 
+
+#ifdef USE_CODEC
+	    codec_put(codec, new_code, FIXED_BITS);      
+#else
 	    coder_dec_put(coder_dec, new_code, FIXED_BITS);
-	
+#endif      
+	    
+
             num_bits++;
             fprintf(stderr, "ENCODE: num_bits has been incremented to %d\n", num_bits);
             assert(num_bits <= max_bit_length);
@@ -79,8 +103,7 @@ void encode(int p, int max_bit_length) {
             //fprintf(stderr, "new special code is %d\n", next_special_code);
           }
         }
-
-    #endif
+#endif
 
 	int sz = table_sz(table);
 
@@ -102,8 +125,11 @@ void encode(int p, int max_bit_length) {
 // Output code C ( if c != EMPTY )
 if (C != EMPTY) {
   assert(C >= 0);
- 
+#ifdef USE_CODEC
+  codec_put(codec, C, FIXED_BITS);  
+#else  
   coder_dec_put(coder_dec, C, FIXED_BITS);
+#endif  
 
 }
 
@@ -115,6 +141,10 @@ if (DBG) {
 
 free_hash(table);
 
+#ifdef USE_CODEC
+codec_free(codec); 
+#else 
 coder_dec_free(coder_dec);
+#endif
 
 }

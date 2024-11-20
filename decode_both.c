@@ -16,7 +16,13 @@ void decode() {
   hash_table *table = initialize_hash(table);
   Stack *stack = initialize_stack();
 
+  // TESTING NEW IMP FOR NOW codec *codec = new_codec();
+
+#ifdef USE_CODEC
+  codec *codec = initialize_codec();  
+#else
   coder_dec *coder_dec = initialize_coder_dec();
+#endif  
 
   int current_num_bits = 9;
   int max_bits;
@@ -33,7 +39,13 @@ void decode() {
   int next_special_code = 511;
 
 
+#ifdef USE_CODEC
+  while ((newC = c = codec_get(codec, FIXED_BITS)) != EOF) {  
+#else
   while ((newC = c = coder_dec_get(coder_dec, FIXED_BITS)) != EOF) {
+#endif    
+
+
 
     assert(c >= 0);
     if (check_first_code) { // treating the first code differently since it
@@ -115,6 +127,10 @@ void decode() {
   free(stack);
   free_hash(table);
 
+#ifdef USE_CODEC
+  codec_free(codec);  
+#else
   coder_dec_free(coder_dec);
+#endif  
 
 }
