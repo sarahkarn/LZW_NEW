@@ -2,66 +2,8 @@
 #include "codec.h"
 #include <stdio.h>
 #include <stdlib.h>
-//#define CHAR_BIT 8
-// define EMPTY -1
-//#define NOT_FOUND -2
 #include <assert.h>
 
-// WORKING VERSION OF ENCODE
-/* void encode(int p, int max_bit_length) {
-  hash_table *table = malloc(sizeof(hash_table));
-  if (!table) {
-    fprintf(stderr, "Memory allocation for hash table failed inside encode");
-    exit(1);
-  }
-  initialize_hash(table);
-  int next_pair_code = 256;
-  int prefix_index = EMPTY;
-  int k;
-
-  while ((k = getchar()) != EOF) {
-    int pair_code = check_pair_in_table(prefix_index, k, table);
-    //fprintf(stderr, "Pair code from check_pair is %d\n", pair_code);
-    if (pair_code != NOT_FOUND) {
-      // Found the pair, update prefix_index to the found pair code
-      //fprintf(stderr, "A: pair_code (%d,%d) found\n", prefix_index, k);
-      prefix_index = pair_code;
-      //fprintf(stderr, "Prefix index has been set to %d\n", pair_code);
-    } else {
-      // Pair not found, output current prefix_index
-      if (prefix_index != EMPTY) {
-        printf("%d\n", prefix_index);
-        fflush(stdout); // Ensure immediate output
-      }
-      // Insert the new pair into the table
-      //fprintf(stderr, "B: pair_code (%d,%d) not found\n", prefix_index, k);
-      assert(prefix_index >= 0); // Ensure prefix_index is valid before
-inserting
-      //fprintf(stderr, "adding (%d,%d,%d)\n", next_pair_code, prefix_index, k);
-      insert_pair_in_table(table, next_pair_code, prefix_index, k);
-
-      // Debugging print statements
-      assert(next_pair_code >= 256);
-      //fprintf(stderr, "Pair code is: %d\n", next_pair_code);
-
-      next_pair_code++;
-      prefix_index = k; // Update prefix_index to k for the next iteration
-      //fprintf(stderr, "Inside else block, prefix_index has been set to %d\n",
-k);
-    }
-  }
-
-  // Print the last prefix_index if it's not EMPTY
-  if (prefix_index != EMPTY) {
-    printf("%d\n", prefix_index);
-    fflush(stdout); // Ensure immediate output
-  }
-
-  free_hash(table);
-  free(table); // Free the overall hash_table struct
-} */
-
-// my latest version of encode BELOW
 
 int count = 0;
 
@@ -79,7 +21,6 @@ void encode(int p, int max_bit_length) {
 
   // first line is MAXBIT as specified in bullet (E)
 
-  // TESTING NEW IMP FOR NOW codec_put(codec, max_bit_length, FIXED_BITS);
 
 #ifdef USE_CODEC
   codec_put(codec, max_bit_length, FIXED_BITS);  
@@ -113,16 +54,6 @@ void encode(int p, int max_bit_length) {
 
       assert(C >= 0);
 
-      // TESTING NEW IMP FOR NOW codec_put(codec, C, FIXED_BITS);
-
-
-      //#if 1
-      //      if( C == 6808 ) {
-      //	fprintf(stderr, "writing C:%d\n", C );
-      //	fprintf(stderr,"This shouldn't happen\n");
-      //	exit(-1);
-      //      }
-      //#endif      
 
 #ifdef USE_CODEC
       codec_put(codec, C, FIXED_BITS);      
@@ -199,7 +130,7 @@ if (C != EMPTY) {
 #else  
   coder_dec_put(coder_dec, C, FIXED_BITS);
 #endif  
-  // TESTING NEW IMP FOR NOW codec_put(codec, C, FIXED_BITS);
+
 }
 
 // fprintf(stderr,"C: Table has %d entries\n", table->next_pair_code );  DEBUG
@@ -216,5 +147,4 @@ codec_free(codec);
 coder_dec_free(coder_dec);
 #endif
 
-// TESTING NEW IMP FOR NOW free_codec(codec);
 }

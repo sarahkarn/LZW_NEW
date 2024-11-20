@@ -9,7 +9,6 @@
 #include "common.h"
 #include <assert.h>
 
-// int last_code_assigned = 256;
 
 // NEW DECODE USING RIGHT SIDE PSEUDO
 void decode() {
@@ -39,7 +38,6 @@ void decode() {
 
   int next_special_code = 511;
 
-  //  while ((newC = c = get_code()) != EOF) {
 
 #ifdef USE_CODEC
   while ((newC = c = codec_get(codec, FIXED_BITS)) != EOF) {  
@@ -48,9 +46,6 @@ void decode() {
 #endif    
 
 
-    //  fprintf(stderr,"c:%d\n", c );
-  
-  // TESTING NEW IMP FOR NOW while ((newC = c = codec_get(codec, FIXED_BITS)) != EOF) {
 
     assert(c >= 0);
     if (check_first_code) { // treating the first code differently since it
@@ -91,7 +86,7 @@ void decode() {
       ;
     }
 
-    if (table->codes[c] == NULL) { // Unknonw code
+    if (table->codes[c] == NULL) { // Unknown code
       push(stack, final_k);
       c = oldC;
     }
@@ -137,5 +132,5 @@ void decode() {
 #else
   coder_dec_free(coder_dec);
 #endif  
-  // TESTING NEW IMP FOR NOW free_codec(codec);
+
 }

@@ -35,8 +35,8 @@ clean:
 	rm -f p -f program
 	rm -f decode
 	rm -f encode
-	rm codec_encode.o
-	rm codec_decode.o
+	rm -f codec_encode.o
+	rm -f codec_decode.o
 	rm -f DBG.encode
 	rm -f DBG.decode
 	rm -f DBG.pruned_encode
