@@ -1,6 +1,6 @@
-./boot_data.bin
-./boot_data.txt
-./boot_data.verify
+boot_data.bin
+boot_data.txt
+boot_data.verify
 *.o
 *~
 DBG.encode

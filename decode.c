@@ -61,9 +61,9 @@ void decode() {
     }
 
 #ifdef USE_SPECIAL_CODES
-    if (c == next_special_code) {
+    if (num_bits < max_bits && c == next_special_code) {
       num_bits++;
-      fprintf(stderr, "DECODE: num_bits: %d\n", num_bits);
+      //fprintf(stderr, "DECODE: num_bits: %d\n", num_bits);
       assert(num_bits <= max_bits);
       next_special_code = next_special(num_bits);
       continue;
@@ -72,15 +72,14 @@ void decode() {
 
     if (p && table_full(table)) { // Prune table and modify oldC
 
-      fprintf(stderr, "DECODE: TABLE FULL\n");
+      //fprintf(stderr, "DECODE: TABLE FULL\n");
 
       int old_sz = table_sz(table);
       int orig_oldC = oldC;
       table = prune(table, &oldC);
       int sz = table_sz(table);
-      fprintf(stderr, "DECODE: PRUNE %d->%d  %d->%d\n", old_sz, sz, orig_oldC,
-              oldC);
-      ;
+      //fprintf(stderr, "DECODE: PRUNE %d->%d  %d->%d\n", old_sz, sz, orig_oldC,
+              //oldC);
     }
 
     if (table->codes[c] == NULL) { // Unknown code
@@ -108,7 +107,7 @@ void decode() {
         int new_code = insert_pair_in_table(table, oldC, final_k);
         int sz = table_sz(table);
         if (sz >= 4090) {
-          fprintf(stderr, "DECODE: insert %d %d %d\n", new_code, oldC, final_k);
+          //fprintf(stderr, "DECODE: insert %d %d %d\n", new_code, oldC, final_k);
         }
       }
     }

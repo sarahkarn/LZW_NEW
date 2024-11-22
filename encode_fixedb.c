@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define FIXED_BITS 12
+
 int count = 0;
 
 void encode(int p, int max_bit_length) {

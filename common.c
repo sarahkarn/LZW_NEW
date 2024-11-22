@@ -216,7 +216,14 @@ int table_sz( hash_table* table ) {
   return table->next_pair_code;
 }
 
+// VERY IMPORTANT TO MARK THE CODE THAT WE'RE PASSING IN
 hash_table *prune(hash_table *original_table, int* code ) {
+
+  // Fixing the hippo.jpg
+  assert( *code < table_sz( original_table ) );
+  mark_pref_bit( original_table, *code );
+  //
+
   
   int original_len = table_sz(original_table);
   for (int i = 0; i < 256; i++) {
@@ -268,6 +275,8 @@ hash_table *prune(hash_table *original_table, int* code ) {
         insert_pair_in_table(pruned_table, map_c, map_k);
     }
   }
+
+  //fprintf(stderr,"pruned table has size %d\n", table_sz(pruned_table) );
 
   free_hash(original_table);
   return pruned_table;

@@ -62,14 +62,14 @@ void encode(int p, int max_bit_length) {
       // fflush(stdout);
 
       if (p && table_full(table)) { // Prune table and modify C
-        fprintf(stderr, "ENCODE: TABLE FULL\n");
+        //fprintf(stderr, "ENCODE: TABLE FULL\n");
 
         int orig_C = C;
         int orig_sz = table_sz(table);
         table = prune(table, &C);
         int sz = table_sz(table);
-        fprintf(stderr, "ENCODE PRUNE: %d->%d  %d->%d\n", orig_sz, sz, orig_C,
-                C);
+        //fprintf(stderr, "ENCODE PRUNE: %d->%d  %d->%d\n", orig_sz, sz, orig_C,
+                //C);
       }
 
 
@@ -86,11 +86,11 @@ void encode(int p, int max_bit_length) {
 	if (num_bits < max_bit_length) {	
 	  if (new_code == next_special_code) {
 
-        put_(coder_dec, new_code, num_bits);
+	    put_(coder_dec, new_code, num_bits);
 	    //coder_dec_put(coder_dec, new_code, FIXED_BITS);
 	
             num_bits++;
-            fprintf(stderr, "ENCODE: num_bits has been incremented to %d\n", num_bits);
+            //fprintf(stderr, "ENCODE: num_bits has been incremented to %d\n", num_bits);
             assert(num_bits <= max_bit_length);
             next_special_code = next_special(num_bits);
             //fprintf(stderr, "new special code is %d\n", next_special_code);
@@ -102,8 +102,8 @@ void encode(int p, int max_bit_length) {
 	int sz = table_sz(table);
 
 	if (sz >= 4090) {
-	  fprintf(stderr, "ENCODE: insert %d %d %d\n", new_code, C, K);
-	}
+	  //fprintf(stderr, "ENCODE: insert %d %d %d\n", new_code, C, K);
+	} 
       
       }
 

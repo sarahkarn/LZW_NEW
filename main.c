@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
   char *stage_env = getenv("STAGE");
   STAGE = stage_env ? atoi(stage_env) : 0;
 
-  fprintf(stderr,"STAGE:%d\n", STAGE );
+  //fprintf(stderr,"STAGE:%d\n", STAGE );
 
   //test_coder_dec();
   //return 0;
@@ -74,5 +74,5 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "       %s < input > output\n", argv[0]);
     exit(1);
   }
-  return 0;
+  exit(0);  // WAS TOLD TO CHANGE TO exit(0)
 }

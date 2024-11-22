@@ -41,6 +41,7 @@ clean:
 	rm -f DBG.decode
 	rm -f DBG.pruned_encode
 
+all_tests: three_spaces foo_1 foo_2 foo_3 baba baba_1 baba_2 baba_3 hello_world numbers numbers_3 blank baba_encode boot_info unreadable_2 unreadable_3 testing hippo_1 hippo_2 hippo_3 flower_1 flower_2 flower_3
 
 three_spaces: 
 	echo "   " | DBG=1 STAGE=1 ./encode | DBG=1 STAGE=1 ./decode
@@ -71,6 +72,10 @@ baba_2:
 baba_3:
 	echo "BABA" | STAGE=3 ./encode -m 9 -p | STAGE=3 ./decode
 
+baba_3_dump:
+	echo "BABA" | DBG=1 STAGE=3 ./encode -m 12 -p | DBG=1 STAGE=3 ./decode
+
+
 hello_world:
 	./encode < test_cases/hello_world.txt | ./decode | cmp - test_cases/hello_world.txt
 
@@ -94,10 +99,33 @@ baba_encode:
 
 
 boot_info:
-	#DBG=1 ./encode < test_cases/Boot-Info_20240527_2222.txt | DBG=1 ./decode | cmp - test_cases/Boot-Info_20240527_2222.txt
-	#DBG=1 STAGE=2 ./encode -p < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 ./encode < test_cases/Boot-Info_20240527_2222.txt | DBG=1 ./decode | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 STAGE=2 ./encode -p < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
 	DBG=1 STAGE=3 ./encode  -p  < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=3 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
-	#DBG=1 STAGE=3 ./encode -p < test_cases/Boot-Info_20240527_2222.txt > junk
+	DBG=1 STAGE=3 ./encode -p < test_cases/Boot-Info_20240527_2222.txt > junk
+
+boot_2:
+	DBG=1 STAGE=2 ./encode < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 STAGE=2 ./encode -p < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+
+boot_3:
+	DBG=1 STAGE=3 ./encode < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=3 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 STAGE=3 ./encode -p < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=3 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+
+boot_1:
+	DBG=1 STAGE=1 ./encode < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=1 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 STAGE=1 ./encode -p < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=1 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+
+boot_2mbits:
+	DBG=1 STAGE=2 ./encode < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 STAGE=2 ./encode -m 9 < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 STAGE=2 ./encode -m 10 < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+
+
+boot_3mbits:
+	DBG=1 STAGE=3 ./encode < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=3 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 STAGE=3 ./encode -m 10 < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=3 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+
 
 unreadable_2:
 	DBG=1 STAGE=2 ./encode -p < test_cases/unreadable.dat | DBG=1 STAGE=2 ./decode  | cmp - test_cases/unreadable.dat
@@ -109,4 +137,29 @@ testing:
 	STAGE=2 ./encode -p < test_cases/Boot-Info_20240527_2222.txt     > ./boot_data.txt
 	cat boot_data.txt | ./codec_encode > ./boot_data.bin
 	cat boot_data.bin | ./codec_decode > ./boot_data.verify
+
+
+hippo_1:
+	DBG=1 STAGE=1 ./encode -p < test_cases/hippo_pic.jpg | DBG=1 STAGE=1 ./decode  | cmp - test_cases/hippo_pic.jpg
+
+
+hippo_2:
+	DBG=1 STAGE=2 ./encode -p < test_cases/hippo_pic.jpg | DBG=1 STAGE=2 ./decode  | cmp - test_cases/hippo_pic.jpg
+
+
+hippo_3:
+	DBG=1 STAGE=3 ./encode -p < test_cases/hippo_pic.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/hippo_pic.jpg
+
+
+flower_1:
+	#DBG=1 STAGE=1 ./encode -p < test_cases/flower.jpg | DBG=1 STAGE=1 ./decode  | cmp - test_cases/flower.jpg
+	DBG=1 STAGE=1 ./encode < test_cases/flower.jpg | DBG=1 STAGE=1 ./decode  | cmp - test_cases/flower.jpg
+
+
+flower_2:
+	DBG=1 STAGE=2 ./encode -p < test_cases/flower.jpg | DBG=1 STAGE=2 ./decode  | cmp - test_cases/flower.jpg
+
+
+flower_3:
+	DBG=1 STAGE=3 ./encode -p < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
 
