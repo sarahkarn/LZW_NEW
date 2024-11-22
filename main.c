@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "codec.h"
 #include "decode.h"
 #include "encode.h"
-#include "codec.h"
 
 #include "common.h"
 
@@ -26,26 +26,23 @@ int main(int argc, char *argv[]) {
   char *stage_env = getenv("STAGE");
   STAGE = stage_env ? atoi(stage_env) : 0;
 
-  //fprintf(stderr,"STAGE:%d\n", STAGE );
+  // fprintf(stderr,"STAGE:%d\n", STAGE );
 
-  //test_coder_dec();
-  //return 0;
-
+  // test_coder_dec();
+  // return 0;
 
   // Checking the DBG environment variable
   char *dbg_env = getenv("DBG");
   DBG = dbg_env ? atoi(dbg_env) : 0;
 
-
-  if (strcmp(exec_name, "encode") == 0) {   // default settings
+  if (strcmp(exec_name, "encode") == 0) { // default settings
     int maxBits = 12;
     int pruning = 0;
 
     // TODO: Parsing logic
-    
 
     // Parsing of -p and -m flags only applies to STAGES 2 and 3
-    if ( STAGE == 2 || STAGE == 3) {
+    if (STAGE == 2 || STAGE == 3) {
       for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-p") == 0) {
           pruning = 1; // Enable prune mode
@@ -59,6 +56,17 @@ int main(int argc, char *argv[]) {
       }
     }
 
+    if (maxBits == 8 || maxBits > 20) {
+      maxBits = 12;
+    } else {
+      if (maxBits < 9) {
+        maxBits = 9;
+      }
+      if (maxBits > 12) {
+        maxBits = 12;
+      }
+    }
+
     encode(pruning, maxBits);
 
   } else if (strcmp(exec_name, "decode") == 0) {
@@ -68,11 +76,10 @@ int main(int argc, char *argv[]) {
     }
     decode();
 
-
   } else {
     fprintf(stderr, "Usage: %s [-m MAXBITS] [-p] < input > output\n", argv[0]);
     fprintf(stderr, "       %s < input > output\n", argv[0]);
     exit(1);
   }
-  exit(0);  // WAS TOLD TO CHANGE TO exit(0)
+  exit(0); // WAS TOLD TO CHANGE TO exit(0)
 }

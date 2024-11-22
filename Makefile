@@ -120,6 +120,7 @@ boot_2mbits:
 	DBG=1 STAGE=2 ./encode < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
 	DBG=1 STAGE=2 ./encode -m 9 < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
 	DBG=1 STAGE=2 ./encode -m 10 < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
+	DBG=1 STAGE=2 ./encode -m 11 < test_cases/Boot-Info_20240527_2222.txt | DBG=1 STAGE=2 ./decode  | cmp - test_cases/Boot-Info_20240527_2222.txt
 
 
 boot_3mbits:
@@ -149,6 +150,8 @@ hippo_2:
 
 hippo_3:
 	DBG=1 STAGE=3 ./encode -p < test_cases/hippo_pic.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/hippo_pic.jpg
+	DBG=1 STAGE=3 ./encode < test_cases/hippo_pic.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/hippo_pic.jpg
+
 
 
 flower_1:
@@ -163,3 +166,29 @@ flower_2:
 flower_3:
 	DBG=1 STAGE=3 ./encode -p < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
 
+
+flower_3_11_prune:
+	DBG=1 STAGE=3 ./encode -m 11 -p < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
+	DBG=1 STAGE=3 ./encode -m 11 < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
+
+
+flower_3_12_prune:
+	DBG=1 STAGE=3 ./encode -m 12 -p < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
+	DBG=1 STAGE=3 ./encode -m 12 < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
+
+
+flower_3_12_prune_no_m:
+	DBG=1 STAGE=3 ./encode -p < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
+	DBG=1 STAGE=3 ./encode < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
+
+
+flower_3_10_prune:
+	DBG=1 STAGE=3 ./encode -m 10 -p < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
+	DBG=1 STAGE=3 ./encode -m 10 < test_cases/flower.jpg | DBG=1 STAGE=3 ./decode  | cmp - test_cases/flower.jpg
+
+
+valgrind_encode_decode:
+	#valgrind --leak-check=full ./encode | ./decode < test_cases/Boot-Info_20240527_2222.txt
+	#valgrind --leak-check=full ./encode < test_cases/Boot-Info_20240527_2222.txt
+	valgrind --leak-check=full ./encode < test_cases/Boot-Info_20240527_2222.txt > test_cases/valgrind_test
+	valgrind --leak-check=full ./decode < test_cases/valgrind_test > /dev/null

@@ -134,6 +134,7 @@ void free_hash(hash_table *table) {
   for (int i = 0; i < TABLE_LEN; i++) {
     table->codes[i] = NULL;
   }
+  free(table);
 }
 
 int CHAR(hash_table *table, int pair_code) {

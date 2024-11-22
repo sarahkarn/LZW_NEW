@@ -72,8 +72,10 @@ void encode(int p, int max_bit_length) {
                 //C);
       }
 
-
-      if (!table_full(table)) {
+      int max_sz = 1 << max_bit_length; // ie 2^max_bit_length
+      if (  table_sz(table) < max_sz ) {
+	
+	//      if (!table_full(table)) {
 
         assert(C >= 0);
         assert(K >= 0);

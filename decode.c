@@ -103,7 +103,10 @@ void decode() {
 
     if (oldC != EMPTY) {
 
-      if (!table_full(table)) {
+      int max_sz = 1 << max_bits; // ie 2^max_bits
+      if (  table_sz(table) < max_sz ) {
+	
+	//if (!table_full(table)) {
         int new_code = insert_pair_in_table(table, oldC, final_k);
         int sz = table_sz(table);
         if (sz >= 4090) {
